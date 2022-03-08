@@ -25,7 +25,7 @@ void HowManyLotto(int *num) {
 int Num(int *num) {
     int numbers[6];
     int c;
-    srand(time(0));
+    srand(time(NULL));
     for(int i=0;i<*num;i++) {
         fprintf(fp,"[%d]:",i+1);
         
