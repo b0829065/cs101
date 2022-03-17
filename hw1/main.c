@@ -1,12 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 FILE* fp;
 
 void NowTime() {
     time_t curtime;
     time(&curtime);
-    fprintf(fp,"%s",ctime(&curtime));
+    char* now = ctime(&curtime);
+    now[strlen(now)-1] = 0;
+    fprintf(fp,"=%s=\n",now);
 }
 
 void HowManyLotto(int *num) {
@@ -25,7 +28,7 @@ void HowManyLotto(int *num) {
 int Num(int *num) {
     int numbers[6];
     int c;
-    srand(time(NULL));
+    srand((unsigned)time(NULL));
     for(int i=0;i<*num;i++) {
         fprintf(fp,"[%d]:",i+1);
         
@@ -42,10 +45,10 @@ int Num(int *num) {
                 }
             }
         }
-    for(int q = 0; q<6; q++){
-        fprintf(fp, " %0*d",2,numbers[q]);
-    }
-    fprintf(fp," %0*d\n",2,rand()%10 + 1); 
+    	for(int q = 0; q<6; q++){
+    	    fprintf(fp, " %0*d",2,numbers[q]);
+    	}
+    	fprintf(fp," %0*d\n",2,rand()%10 + 1); 
     }   
 }
 
@@ -53,14 +56,14 @@ int main(){
     fp = fopen("Lotto.txt","w+");
     int num = 0;
     HowManyLotto(&num);
-    fprintf(fp,"========lotto649========\n");
+    fprintf(fp,"=========lotto649=========\n");
     NowTime();
     Num(&num);
     for(int i=0;i<5-num;i++) {
         fprintf(fp,"[%d]: -- -- -- -- -- -- --\n", num + i + 1);
     }   
     
-    fprintf(fp,"======= csie@CGU =======\n");
+    fprintf(fp,"======== csie@CGU ========\n");
     fclose(fp);
     return 0;
 }

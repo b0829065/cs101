@@ -101,7 +101,7 @@ int main() {
     
     fp = fopen(name,"w+");
     fprintf(fp,"======== lotto649 =========\n");
-    fprintf(fp,"=======+ No. %05d +=======\n",count);
+    fprintf(fp,"=======+ No.%05d +========\n",count);
     NowTime();
     Num(&num);
     fprintf(fp,"======== csie@CGU =========\n");
