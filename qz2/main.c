@@ -1,110 +1,70 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <string.h>
-FILE *fp;
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
+#include<string.h>
 
-void NowTime() {
-    time_t curtime;
-    time(&curtime);
-    char* now = ctime(&curtime);
-    now[strlen(now)-1] = 0;
-    fprintf(fp,"= %s=\n",now);
-}
+#define REPORT "Report.txt"
+#define recordFile "records.bin"
 
-void HowManyLotto(int *num) {
-    int a;
-    printf("歡迎光臨長庚樂透彩購買機台\n");
-    printf("請問你要買幾組: ");
-    scanf("%d",&a);
-    if((a>=1) && (a<=5)){
-        printf("已為您購買的 %d 組樂透組合輸入至 Lotto.txt\n",a);
-        *num = a;
-    } else {
-        printf("只能輸入1~5組樂透\n");
+typedef struct lotto_record {
+    int lotto_no;  //編號(counter)
+    int lotto_receipt;  //收據(組數*50*1.1)
+    int emp_id;  //id(input)
+    char lotto_date[16];  //日期
+    char lotto_time[16];  //時間
+} lotto_record_t;
+lotto_record_t record;
+
+void record_data() {  
+	FILE* tmpfp = fopen(recordFile, "r");  //唯讀
+	lotto_record_t tmp[1];
+	char today[16];
+	char lastday[16];
+	int i = 0;
+	
+	fread(tmp,sizeof(lotto_record_t),1,tmpfp);
+	for (int j = 0;j < 16; j++) {
+        lastday[j] = tmp[0].lotto_date[j];
     }
+	    
+	while (fread(tmp,sizeof(lotto_record_t),1,tmpfp)) {
+	    for (int j = 0;j < 16; j++) {
+	        today[j] = tmp[0].lotto_date[j];
+	    }
+	    if(today == lastday){
+	        
+	        
+	    } else {
+	        lastday = today;
+	    }
+	    i++;
+	}
+	fclose(tmpfp);
 }
 
-int Num(int *num) {
-    srand(time(NULL));
-    for (int k = 1; k <= 5; k++) {
-        if (k > *num) {
-            fprintf(fp,"[%d]: -- -- -- -- -- -- --\n",k);
-        } else {
-            fprintf(fp,"[%d]: ",k);
-            int a[70];
-            
-            for (int i = 0; i < 70; i++) {
-                a[i] = i+1;
-            }
-    
-            for (int i = 0; i < 69; i++) {
-                int r = rand() % 69, tmp = a[i];
-                a[i] = a[r];
-                a[r] = tmp;
-            }
-    
-            for (int j = 0; j < 5; j++) {
-                for (int k = 0; k < 5-j; k++) {
-                    if (a[k] > a[k+1]) {
-                        int b = a[k];
-                        a[k] = a[k+1];
-                        a[k+1] = b;
-                    }
-                }
-            }
-    
-            for(int i = 0; i <= 5; i++) {
-                fprintf(fp,"%0*d ",2,a[i]);
-            }
-            for(int i = 6; i <= 68; i++) {
-                if(a[i] < 11) {
-                    fprintf(fp,"%0*d\n",2,a[i]);
-                    break;
-                }
-            }
-        }
-    }
-}
+/*void print_report() {
 
-int countf() {
-    int n;
-    if ((fp = fopen("count.bin","rb+")) == NULL) {
-        n = 0;
-        fp = fopen("count.bin","wb");
-        fwrite(&n,sizeof(int),1,fp);
-        fclose(fp);
-    }
-    fp = fopen("count.bin","rb+");
-    fread(&n,sizeof(int),1,fp);
-    
-    n = n + 1;
-    fp = fopen("count.bin","wb+");
-    fwrite(&n,sizeof(int),1,fp);
-    fclose(fp);
-    return n;
-}
+	FILE* tmpfp = fopen(REPORT, "w+"); 
+	fprintf(tmpfp, "========= lotto649 Report =========\n");
+	fprintf(tmpfp, "= Date =======+ Num. +======= Receipt =\n");
+	fprintf(tmpfp, "= %.*s =\n", 24, ctime(&curtime));  //印目前時間，限制寫24格
+	
+	for(int i = 0 ; i < maxLottoNumSet ; i++) {  //印中間五行 
+		if(i < numSet) {
+			print_lotto_row(tmpfp, i+1);
+		} else {
+			fprintf(tmpfp, "[%d] : -- -- -- -- -- -- --\n", i+1);
+		}
+	}
+	
+	fprintf(tmpfp, "========* Op.%05d *========\n", operator_id);
+	fprintf(tmpfp, "========= csie@CGU =========\n");
+	fclose(tmpfp);
+}*/
 
-void namef(char name[],int c) {
-    for (int i = 8; i >= 5; i--,c /= 10) {
-        name[i] = (c%10+'0');
-    }
-}
-
-
-int main() {
-    int num;
-    HowManyLotto(&num);
-    int count = countf();
-    char name[10] = "lotto";
-    namef(name,count);
-    
-    fp = fopen(name,"w+");
-    fprintf(fp,"======== lotto649 =========\n");
-    fprintf(fp,"=======+ No.%05d +========\n",count);
-    NowTime();
-    Num(&num);
-    fprintf(fp,"======== csie@CGU =========\n");
-    fclose(fp);
+int main()
+{
+    record_data();
     return 0;
 }
+
