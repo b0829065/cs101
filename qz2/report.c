@@ -16,19 +16,19 @@ typedef struct lotto_record {
 lotto_record_t record;
 
 void print_report() {
- FILE* recordFile = fopen(RECORD_FILE, "r");  //唯讀
- lotto_record_t tmp[256];
- int i = 0;
- while (fread(&tmp[i], sizeof(lotto_record_t), 1, recordFile)) {
-     i++;
- }
- fclose(recordFile);
- 
- 
+	FILE* recordFile = fopen(RECORD_FILE, "r");  //唯讀
+	lotto_record_t tmp[256];
+	int i = 0;
+	while (fread(&tmp[i], sizeof(lotto_record_t), 1, recordFile)) {
+	    i++;
+	}
+	fclose(recordFile);
+	
+	
     FILE* reportFile = fopen(REPORT,"w+");
     
- fprintf(reportFile,"========= lotto649 Report =========\n");
- fprintf(reportFile,"- Date ------- Num. ------ Receipt -\n");
+	fprintf(reportFile,"========= lotto649 Report =========\n");
+	fprintf(reportFile,"- Date ------- Num. ------ Receipt -\n");
   
     char today[32];
     time_t now = time(0);
@@ -55,12 +55,12 @@ void print_report() {
         receiptSum = receiptSum + D_receipt;
         noSum = tmp[SameDay].lotto_no;
         
-        fprintf(reportFile,"%s\t\t%d/%d\t\t%d\n",tmp[SameDay].lotto_date,D_no,D_sets,D_receipt);
+        fprintf(reportFile,"%s\t%d/%d\t\t%d\n",tmp[SameDay].lotto_date,D_no,D_sets,D_receipt);
         Day++;
         SameDay++;
     }
     fprintf(reportFile,"-----------------------------------\n");
-    fprintf(reportFile,"\t\t%d\t\t%d/%d\t\t%d\n",dateSum,tmp[i-1].lotto_no,setsSum,receiptSum);
+    fprintf(reportFile,"\t%d\t%d/%d\t\t%d\n",dateSum,tmp[i-1].lotto_no,setsSum,receiptSum);
     fprintf(reportFile,"======== %s Printed =========",today);
     
     fclose(reportFile);
