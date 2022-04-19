@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-
 int swap(int* n, int* m){
     int temp = *n;
     *n = *m;
