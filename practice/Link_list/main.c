@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 typedef struct node{
     int data;
@@ -27,7 +28,7 @@ node_t* append_node(node_t* head, int new_data){
     return head;
 }
 
-show_list(node_t* head){
+void show_list(node_t* head){
     while(head){
         printf("[%d]->",head->data);
         head = head->next_node;
