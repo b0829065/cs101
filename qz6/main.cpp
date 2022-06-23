@@ -29,9 +29,9 @@ class StandardClock : public Clock{
         }
         display(){
             if(meridian == "AM"){
-                cout << "早上 " << hour << ":" << minute << ":" << second << meridian;
+                cout << "早上 " << hour << ":" << minute << ":" << second << endl;
             } else if (meridian == "PM") {
-                cout << "下午 " << hour << ":" << minute << ":" << second << meridian;
+                cout << "下午 " << hour << ":" << minute << ":" << second << endl;
             }
         }
 };
